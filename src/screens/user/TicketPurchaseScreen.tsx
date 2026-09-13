@@ -290,7 +290,7 @@ const handlePurchase = () => {
         <View style={styles.bottomNavContainer}>
           <TouchableOpacity
             style={styles.navButtonActive}
-            onPress={() => navigation.navigate('UserHome')}
+            onPress={() => navigation.navigate('Home')}
           >
             <Image
               source={require('../../../assets/icons/Home.png')}
