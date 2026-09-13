@@ -1,0 +1,15 @@
+export const COLORS = {
+  bgGradientStart: '#2B2E3A',
+  bgGradientEnd: '#0E0E19',
+  titleYellow: '#F4B600',
+  textPurple: '#9BA0EF',
+  textWhite: '#FFFFFF',
+  cardBackground: 'rgba(245, 245, 245, 0.05)',
+  cardBorder: 'rgba(251, 254, 255, 0.15)',
+  redAlert: '#D30709',
+  btnGlowBlue: '#0E1523',
+  btnGlowBorder: 'rgba(251, 254, 255, 0.20)',
+  btnGlowShadow: '#3E3E6B',
+  placeholderGray: '#3A3D4A',
+  circleWhite: '#FFFFFF',
+};
