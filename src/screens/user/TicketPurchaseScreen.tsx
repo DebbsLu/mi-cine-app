@@ -14,15 +14,13 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Picker } from '@react-native-picker/picker';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { RootState } from '../../store';
+import { updateSeatStatuses } from '../../store/slices/showtimesSlice';
 
 // Actions
 import { addTicket } from '../../store/slices/ticketsSlice';
 
 // Tipos centralizados
 import { Pelicula, Funcion, Boleto} from '../../types';
-
-// Constantes
-import { COLORS } from '../../config/constants';
 
 // Configuración de la matriz de asientos de la sala (Filas A-D, Columnas 1-5)
 const ROWS = ['A', 'B', 'C', 'D'];
@@ -67,12 +65,12 @@ export const TicketPurchaseScreen = ({ navigation, route }: any) => {
 
   // Asientos ocupados ficticios/almacenados para la función activa
   // Asientos ocupados obtenidos desde asientosEstado de la función actual
+// Extraer las claves (ej. "A1", "A2") cuyo estado sea 'Ocupado'
 const occupiedSeats = useMemo(() => {
   if (!currentShowtime || !currentShowtime.asientosEstado) {
-    return ['A2']; // Asiento A2 por defecto para coincidir con la pantalla si no hay datos
+    return [];
   }
 
-  // Extraer las claves (ej. "A2") cuyo estado sea 'Ocupado'
   return Object.keys(currentShowtime.asientosEstado).filter(
     (seatKey) => currentShowtime.asientosEstado[seatKey] === 'Ocupado'
   );
@@ -104,7 +102,6 @@ const occupiedSeats = useMemo(() => {
   };
 
   // Confirmar Compra
-// Confirmar Compra
 const handlePurchase = () => {
   if (!selectedMovieId || !currentMovie) {
     Alert.alert('Error', 'Selecciona una película válida.');
@@ -121,7 +118,7 @@ const handlePurchase = () => {
 
   const generatedTicketId = Date.now().toString();
 
-  // Objeto con la estructura EXACTA del tipo Boleto en index.ts
+  // Objeto con la estructura EXACTA del tipo Boleto
   const newTicket: Boleto = {
     id: generatedTicketId,
     idPelicula: currentMovie.id,
@@ -139,8 +136,20 @@ const handlePurchase = () => {
     },
   };
 
-  // Despachar a Redux
+  // 1. Guardar el boleto comprado
   dispatch(addTicket(newTicket));
+
+  // 2. Marcar los asientos seleccionados como 'Ocupado' en la función
+  dispatch(
+    updateSeatStatuses({
+      showtimeId: currentShowtime.id,
+      seatIds: selectedSeats,
+      status: 'Ocupado',
+    })
+  );
+
+  // Limpiar la selección de asientos local
+  setSelectedSeats([]);
 
   Alert.alert(
     '¡Compra Exitosa!',
