@@ -17,8 +17,6 @@ import { Pelicula, Funcion } from '../../types';
 import * as NavigationBar from 'expo-navigation-bar';
 import { useEffect } from 'react';
 
-
-
 export const HomeScreen = ({ navigation }: any) => {
   const movies = useAppSelector((state) => state.movies.movies);
   const showtimes = useAppSelector((state) => state.showtimes.showtimes);
